@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.collections.FXCollections ?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ShogiController">
+   <children>
+    <Pane fx:id="masterPane" layoutX="0.0" layoutY="0.0" prefHeight="800.0" prefWidth="1200.0">
+      <HBox fx:id="startMenu" layoutX="230.0" layoutY="660.0" prefHeight="54.0" prefWidth="757.0">
+         <children>
+            <Label text="先手" />
+            <ChoiceBox fx:id="senteKindChoice" prefWidth="150.0">
+                <items>
+                   <FXCollections fx:factory="observableArrayList">
+                       <String fx:value="プレイヤー" />
+                       <String fx:value="CPU" />
+                   </FXCollections>
+                </items>
+            </ChoiceBox>
+            <Label text="　後手" />
+            <ChoiceBox fx:id="goteKindChoice" prefWidth="150.0">
+                <items>
+                   <FXCollections fx:factory="observableArrayList">
+                       <String fx:value="プレイヤー" />
+                       <String fx:value="CPU" />
+                   </FXCollections>
+                </items>
+            </ChoiceBox>
+            <Label text="　手合い" />
+            <ChoiceBox fx:id="teaiChoice" prefWidth="150.0">
+                <items>
+                   <FXCollections fx:factory="observableArrayList">
+                       <String fx:value="先手八枚落ち" />
+                       <String fx:value="先手六枚落ち" />
+                       <String fx:value="先手四枚落ち" />
+                       <String fx:value="先手二枚落ち" />
+                       <String fx:value="先手飛車落ち" />
+                       <String fx:value="先手角行落ち" />
+                       <String fx:value="平手" />
+                       <String fx:value="後手角行落ち" />
+                       <String fx:value="後手飛車落ち" />
+                       <String fx:value="後手二枚落ち" />
+                       <String fx:value="後手四枚落ち" />
+                       <String fx:value="後手六枚落ち" />
+                       <String fx:value="後手八枚落ち" />
+                   </FXCollections>
+                </items>
+            </ChoiceBox>
+            <Label text="　　　　" />
+            <Button fx:id="gameStartButton" mnemonicParsing="false" onAction="#gameStartButtonClicked" text="ゲームスタート" />
+         </children>
+      </HBox>
+      <ListView layoutX="920.0" layoutY="30.0" prefHeight="200.0" prefWidth="280.0" />
+      <Label layoutX="920.0" layoutY="10.0" text="棋譜" />
+     </Pane>
+   </children>
+</AnchorPane>
