@@ -6,12 +6,11 @@ import java.util.List;
 import shogi.core.Field;
 import shogi.core.Player.TurnType;
 import shogi.core.Position;
-import shogi.graphics.FieldClickObserver;
 
 public class Hisha extends Koma {
 
-	public Hisha(TurnType turnType, KomaType komaType, boolean nari, int x, int y, FieldClickObserver co) {
-		super(turnType, komaType, nari, x, y, co);
+	Hisha(TurnType turnType, boolean nari, int x, int y) {
+		super(turnType, KomaType.HISHA, nari, x, y);
 	}
 
 	@Override

@@ -7,13 +7,12 @@ import shogi.core.Player.TurnType;
 import shogi.graphics.AbstractFieldPane;
 import shogi.graphics.FieldClickObserver;
 import shogi.koma.Fu;
-import shogi.koma.Gin;
 import shogi.koma.Hisha;
 import shogi.koma.Kaku;
 import shogi.koma.Kei;
-import shogi.koma.Kin;
 import shogi.koma.Koma;
 import shogi.koma.Koma.KomaType;
+import shogi.koma.KomaFactory;
 import shogi.koma.Kyo;
 import shogi.koma.Ou;
 
@@ -33,18 +32,28 @@ public class Field {
 	//抽象フィールドグラフィック
 	private AbstractFieldPane fieldPane;
 
+	public Field(Koma[][] field) {
+		this.field = field;
+	}
+
 	public void setFieldPane(AbstractFieldPane fieldPane) {
 		this.fieldPane = fieldPane;
 	}
 
 	//コンストラクタ
-	public Field(FieldClickObserver fco) {
-		this.fco = fco;
-	}
+	//public Field() {
+	//}
 
 	public List<Koma> createAllKoma(){
 		KomaFactory kf = new KomaFactory();
-		return kf.createAllKoma();
+
+		List<Koma> allKoma = kf.createAllKoma();
+
+		for(Koma aKoma : allKoma) {
+			field[aKoma.getFieldX()][aKoma.getFieldY()] = aKoma;
+		}
+
+		return allKoma;
 	}
 
 	//ゲーム開始時処理（クリックを受け付けるようにする）
@@ -244,7 +253,9 @@ public class Field {
 						for(int y = FIELD_ARR_Y_SIZE - 1; y >= 1; y--) {
 							if(field[x][y] == null) placeablePosition.add(new Position(x, y));
 							if(field[x][y] != null && field[x][y].getKomaType() == KomaType.FU
-								&& field[x][y].getTurnType() == koma.getTurnType()) {
+								&& field[x][y].getTurnType() == koma.getTurnType()
+								&& !field[x][y].isNari()) {
+								System.out.println("二歩COL:" + x);
 								nifuColList.add(x);
 							}
 						}
@@ -255,7 +266,10 @@ public class Field {
 						for(int y = 0; y < FIELD_ARR_Y_SIZE - 1; y++) {
 							if(field[x][y] == null) placeablePosition.add(new Position(x, y));
 							if(field[x][y] != null && field[x][y].getKomaType() == KomaType.FU
-								&& field[x][y].getTurnType() == koma.getTurnType()) {
+								&& field[x][y].getTurnType() == koma.getTurnType()
+								&& !field[x][y].isNari()) {
+								System.out.println("二歩COL:" + x);
+
 								nifuColList.add(x);
 							}
 						}
@@ -405,89 +419,7 @@ public class Field {
 		return fieldPane;
 	}
 
-	//駒生成用ファクトリ
-	private class KomaFactory{
 
-		//プレイヤー毎20個の駒を定義
-		private Koma.KomaType[] komaTypeArray = {
-				Koma.KomaType.FU,
-				Koma.KomaType.FU,
-				Koma.KomaType.FU,
-				Koma.KomaType.FU,
-				Koma.KomaType.FU,
-				Koma.KomaType.FU,
-				Koma.KomaType.FU,
-				Koma.KomaType.FU,
-				Koma.KomaType.FU,
-				Koma.KomaType.KAKU,
-				Koma.KomaType.HISHA,
-				Koma.KomaType.KYO,
-				Koma.KomaType.KEI,
-				Koma.KomaType.GIN,
-				Koma.KomaType.KIN,
-				Koma.KomaType.OU,
-				Koma.KomaType.KIN,
-				Koma.KomaType.GIN,
-				Koma.KomaType.KEI,
-				Koma.KomaType.KYO
-				};
-
-		//プレイヤー毎20個の駒の初期位置を定義
-		private int[][] xPosArray = {{0,1,2,3,4,5,6,7,8,1,7,0,1,2,3,4,5,6,7,8},
-									  {0,1,2,3,4,5,6,7,8,7,1,0,1,2,3,4,5,6,7,8}};
-		private int[][] yPosArray = {{6,6,6,6,6,6,6,6,6,7,7,8,8,8,8,8,8,8,8,8},
-									  {2,2,2,2,2,2,2,2,2,1,1,0,0,0,0,0,0,0,0,0}};
-
-		public List<Koma> createAllKoma() {
-
-			List<Koma> ret = new LinkedList<Koma>();
-
-			ret.addAll(createPlayerKoma(TurnType.SENTE));
-			ret.addAll(createPlayerKoma(TurnType.GOTE));
-
-			return ret;
-		}
-
-		private List<Koma> createPlayerKoma(TurnType turnType) {
-			List<Koma> ret = new LinkedList<Koma>();
-
-			for(int i = 0; i < komaTypeArray.length; i++) {
-				ret.add(createKoma(
-						turnType,
-						komaTypeArray[i],
-						false,
-						xPosArray[turnType.getIndex()][i],
-						yPosArray[turnType.getIndex()][i],
-						fco));
-			}
-			return ret;
-		}
-
-		//指定位置に駒を生成
-		private Koma createKoma(
-				Player.TurnType turnType, Koma.KomaType komaType,
-				boolean nari, int x, int y, FieldClickObserver co) {
-
-			//新たな駒を生成
-			Koma koma = switch(komaType) {
-				case FU -> new Fu(turnType, komaType, nari, x, y, co);
-				case HISHA -> new Hisha(turnType, komaType, nari, x, y, co);
-				case KAKU -> new Kaku(turnType, komaType, nari, x, y, co);
-				case KYO -> new Kyo(turnType, komaType, nari, x, y, co);
-				case KEI -> new Kei(turnType, komaType, nari, x, y, co);
-				case GIN -> new Gin(turnType, komaType, nari, x, y, co);
-				case KIN -> new Kin(turnType, komaType, nari, x, y, co);
-				case OU -> new Ou(turnType, komaType, nari, x, y, co);
-				default -> throw new IllegalArgumentException("Unexpected value: " + komaType);
-			};
-
-			//フィールドにセット
-			field[x][y] = koma;
-
-			return koma;
-
-		}
-	}
 
 	//移動可能ポジションを消去
 	public void clearMovablePosition() {
@@ -503,6 +435,10 @@ public class Field {
 	//移動可能位置表示
 	public void drawMovablePosition(List<Position> candidates) {
 		fieldPane.drawMovablePosition(candidates);
+	}
+
+	public void setFieldClickObserver(FieldClickObserver fco) {
+		this.fco = fco;
 	}
 
 

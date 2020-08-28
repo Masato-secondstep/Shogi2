@@ -11,6 +11,8 @@ import shogi.state.GameState.NextAction;
 import shogi.state.GameStateCommon;
 import shogi.state.MovingState;
 import shogi.state.SelectingState;
+import shogi.util.LoadedData;
+import shogi.util.ShogiProperty;
 
 public class GameManager implements FieldClickObserver{
 
@@ -47,15 +49,22 @@ public class GameManager implements FieldClickObserver{
 	public void gameStart(AbstractGraphicsManager gm) {
 		this.gm = gm;
 
-		this.field = new Field((FieldClickObserver)this);
+		ShogiProperty prop = new ShogiProperty();
+		LoadedData ld = prop.load("Custom1");
+
+		this.field = new Field(ld.getField());
+		this.field.setFieldClickObserver((FieldClickObserver)this);
 		gm.addField(field);
 
-		List<Koma> allKoma = field.createAllKoma();
-		gm.addAllKoma(allKoma);
+		//List<Koma> allKoma = field.createAllKoma();
+		gm.addAllKoma(field.getPlayerKomas(TurnType.SENTE));
+		gm.addAllKoma(field.getPlayerKomas(TurnType.GOTE));
 
 		//先手・後手　駒生成
-		sente = new Player(Player.TurnType.SENTE, (FieldClickObserver)this);
-		gote = new Player(Player.TurnType.GOTE, (FieldClickObserver)this);
+		sente = new Player(Player.TurnType.SENTE, ld.getSenteKomas(), (FieldClickObserver)this);
+		gote = new Player(Player.TurnType.GOTE, ld.getGoteKomas(), (FieldClickObserver)this);
+		gm.addAllKoma(ld.getSenteKomas());
+		gm.addAllKoma(ld.getGoteKomas());
 		gm.addPlayer(sente);
 		gm.addPlayer(gote);
 

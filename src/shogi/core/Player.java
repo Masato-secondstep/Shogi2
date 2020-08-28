@@ -1,7 +1,6 @@
 package shogi.core;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import shogi.graphics.AbstractKomadaiPane;
@@ -50,13 +49,14 @@ public class Player {
 
 	private FieldClickObserver fco;
 
-	public Player(TurnType turnType, FieldClickObserver clickObserver) {
-		this.mochigoma = new LinkedList<Koma>();
+	public Player(TurnType turnType, List<Koma> mochigoma, FieldClickObserver clickObserver) {
+		this.mochigoma = mochigoma;
 		this.turnType = turnType;
 		this.fco = clickObserver;
 
-		//this.abstractKomadaiPane =
-		//		GraphicsManager.createKomadaiPane(turnType, mochigoma, clickObserver);
+		//駒をソートする
+		Collections.sort(mochigoma, (koma1, koma2) ->
+			koma2.getKomaType().getScore() - koma1.getKomaType().getScore());
 	}
 
 	//相手の駒を取った時
@@ -108,6 +108,9 @@ public class Player {
 
 	public void setAbstractKomadaiPane(AbstractKomadaiPane abstractKomadaiPane) {
 		this.abstractKomadaiPane = abstractKomadaiPane;
+
+		//駒台を更新
+		abstractKomadaiPane.refresh(mochigoma);
 	}
 
 	public TurnType getTurnType() {

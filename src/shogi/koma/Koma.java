@@ -56,8 +56,7 @@ public abstract class Koma implements KomaClickObserver {
 	public abstract List<Position> getMovablePositionsWithoutConsiderField();
 
 	//コンストラクタ
-	public Koma(TurnType turnType, KomaType komaType, boolean nari,
-			int x, int y, FieldClickObserver co) {
+	Koma(TurnType turnType, KomaType komaType, boolean nari, int x, int y) {
 
 		this.turnType = turnType;
 		this.komaType = komaType;
@@ -65,8 +64,12 @@ public abstract class Koma implements KomaClickObserver {
 		this.position = new Position(x, y);
 		//this.x = x;
 		//this.y = y;
-		this.co = co;
+		//this.co = co;
 
+	}
+
+	public void setFieldClickObserver(FieldClickObserver co) {
+		this.co = co;
 	}
 
 	protected boolean isValidPosition(int tryX, int tryY) {

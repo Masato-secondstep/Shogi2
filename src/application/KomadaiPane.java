@@ -55,8 +55,7 @@ public class KomadaiPane extends Pane implements AbstractKomadaiPane{
 
 		this.canvas.setOnMouseClicked(e -> {
 			Koma koma = getKomadaiKoma((int)e.getX(), (int)e.getY());
-			//System.out.println(koma);
-			clickObserver.komadaiClicked(koma);
+			if(koma != null) clickObserver.komadaiClicked(koma);
 		});
 	}
 

@@ -6,12 +6,11 @@ import java.util.List;
 import shogi.core.Field;
 import shogi.core.Player.TurnType;
 import shogi.core.Position;
-import shogi.graphics.FieldClickObserver;
 
 public class Kaku extends Koma {
 
-	public Kaku(TurnType turnType, KomaType komaType, boolean nari, int x, int y, FieldClickObserver co) {
-		super(turnType, komaType, nari, x, y, co);
+	Kaku(TurnType turnType, boolean nari, int x, int y) {
+		super(turnType, KomaType.KAKU, nari, x, y);
 	}
 
 	@Override

@@ -5,12 +5,11 @@ import java.util.List;
 
 import shogi.core.Player.TurnType;
 import shogi.core.Position;
-import shogi.graphics.FieldClickObserver;
 
 public class Gin extends Koma {
 
-	public Gin(TurnType turnType, KomaType komaType, boolean nari, int x, int y, FieldClickObserver co) {
-		super(turnType, komaType, nari, x, y, co);
+	Gin(TurnType turnType, boolean nari, int x, int y) {
+		super(turnType, KomaType.GIN, nari, x, y);
 	}
 
 	@Override
